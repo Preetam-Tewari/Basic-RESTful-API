@@ -32,6 +32,35 @@ app.get("/api/contacts/:id", function(req, res){
     res.json(contact[0]);
 });
 
+app.post("/api/contacts", function(req, res){
+    const contact = {
+        id: contacts.length +1,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        website: req.body.website
+    };
+
+    contacts.push(contact);
+    res.json(contact);
+});
+
+app.put("/api/contacts/:id", function(req, res){
+    const reqId = req.params.id;
+    let contact = contacts.filter(contact => {
+        return contact.id == reqId;
+    })[0];
+
+    const index = contacts.indexOf(contact);
+    const keys = Object.keys(req.body);
+    keys.forEach(key =>{
+        contact[key] = req.body[key];
+    });
+
+    contacts[index]= contact;
+    res.json(contacts[index]);
+});
+
 app.listen(port, hostname, () => {
     console.log('Server is running');
 });
